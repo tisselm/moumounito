@@ -1,157 +1,246 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>À la recherche de Moumounito</title>
-  <center>
-  <img src="moumounito.png" alt="Moumounito" width="250" style="margin-top: 20px;">
-</center><link rel="manifest" href="manifest.webmanifest">
-<style>
-  body {
-    margin: 0;
-    background-color: #b4f8c8;
-    font-family: 'Comic Sans MS', sans-serif;
-    text-align: center;
-    color: #333;
-  }
-  h1 {
-    font-size: 2em;
-    background: linear-gradient(to right, red, orange, yellow, green, blue, purple);Ò
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-top: 30px;
-  }
-  h2 {
-    margin-top: -10px;
-    color: #444;
-    font-size: 1.2em;
-  }
-  #game {
-    margin-top: 20px;
-  }
-  button {
-    background-color: #3cb371;
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    margin: 10px;
-    border-radius: 12px;
-    font-size: 1.1em;
-    cursor: pointer;
-  }
-  button:hover {
-    background-color: #2e8b57;
-  }
-  #score {
-    font-weight: bold;
-    margin-top: 10px;
-  }
-  #message {
-    font-size: 1.2em;
-    margin-top: 15px;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mais où, où, où, où est Moumounito ?</title>
+  <style>
+    :root{
+      --mint1:#b9fff5; --mint2:#ffffff; --ink:#0f3d35;
+      --btn1:#00c9a7; --btn1b:#00b398; --btn2:#8b5cf6; --btn2b:#6d28d9;
+      --btn3:#f59e0b; --btn3b:#d97706; --btn4:#ef4444; --btn4b:#dc2626;
+      --btn5:#3b82f6; --btn5b:#2563eb;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family: "Comic Sans MS", system-ui, -apple-system, sans-serif;
+      margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      text-align:center;background:linear-gradient(180deg,var(--mint1),var(--mint2));
+      color:var(--ink); padding:12px;
+    }
+    h1{font-size:2.1rem;margin:6px 0 2px;text-shadow:1px 1px 2px #7fffd4}
+    h2{font-weight:400;margin:0 0 14px;color:#365c55}
+    .wrap{width:min(900px,100%);padding:8px 12px}
+    img{width:200px;max-width:55vw;margin:6px auto 12px;animation:bounce 2s infinite}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+    .bar{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin:8px 0}
+    .tag{background:#e9fff9;border-radius:999px;color:#04695d;padding:8px 14px;font-weight:800}
+
+    .hint{font-size:1.1rem;margin:10px 0 4px}
+    .msg{min-height:34px;margin-top:8px;font-size:1.15rem}
+
+    .controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+    .btn{
+      border:0;border-radius:14px;color:#fff;font-weight:900;letter-spacing:.2px;
+      padding:14px 20px;cursor:pointer;box-shadow:2px 4px 10px rgba(0,0,0,.18);
+      transition:.2s;font-size:1.05rem;background:#00c9a7;
+    }
+    .btn:hover{transform:translateY(-1px);filter:brightness(.98)}
+    .btn:active{transform:translateY(0)}
+
+    /* GROS boutons de lieux (très cliquables) */
+    .choices{
+      display:grid;gap:12px;margin-top:10px;
+      grid-template-columns:repeat(2,minmax(160px,1fr));
+    }
+    @media (max-width:560px){ .choices{grid-template-columns:1fr} }
+    .choice{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      min-height:76px;font-size:1.15rem;font-weight:900;color:#fff;border:0;border-radius:18px;cursor:pointer;
+      box-shadow:2px 6px 14px rgba(0,0,0,.18);transition:transform .2s, filter .2s;
+    }
+    .choice:hover{transform:translateY(-2px)}
+    .choice[disabled]{opacity:.55;filter:grayscale(.2);cursor:not-allowed;transform:none}
+
+    /* Couleurs variées par bouton */
+    .c-ecole   {background:linear-gradient(180deg,var(--btn5),var(--btn5b));}
+    .c-parc    {background:linear-gradient(180deg,#22c55e,#16a34a);}
+    .c-piscine {background:linear-gradient(180deg,#06b6d4,#0891b2);}
+    .c-nano    {background:linear-gradient(180deg,var(--btn3),var(--btn3b));}
+    .c-chambre {background:linear-gradient(180deg,var(--btn2),var(--btn2b));}
+  </style>
 </head>
 <body>
+  <div class="wrap">
+    <h1>Mais où, où, où, où est Moumounito ?</h1>
+    <h2>Sa loupe a encore disparu ! 🔍</h2>
 
-<h1>Mais où, où, où, où est Moumounito ?</h1>
-<h2>Sa loupe a encore disparu ! 🔍</h2>
+    <img src="moumounito.png" alt="Moumounito détective" />
 
-<audio id="music" loop autoplay>
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9d56cdbf4d.mp3?filename=funny-comedy-background-music-141076.mp3" type="audio/mpeg">
-</audio>
-<audio id="win" src="https://cdn.pixabay.com/download/audio/2021/09/30/audio_739bd4b0eb.mp3?filename=kids-cheering-101573.mp3"></audio>
-<audio id="lose" src="https://cdn.pixabay.com/download/audio/2022/03/09/audio_b86c66e444.mp3?filename=cartoon-failure-trumpet-230690.mp3"></audio>
+    <div class="bar">
+      <span class="tag" id="timer">⏱️ 60 s</span>
+      <span class="tag" id="score">Score : 0 / 0</span>
+    </div>
 
-<div id="game">
-  <button id="playBtn">🎮 Jouer !</button>
-  <button id="shareBtn">📤 Partager le jeu</button>
-</div>
+    <p class="hint" id="hint">Appuie sur “Nouvelle manche” pour recevoir un indice 👀</p>
 
-<div id="choices" style="display:none;">
-  <p id="hint"></p>
-  <button class="choice">🏫 À l'école</button>
-  <button class="choice">🏡 Chez Nano</button>
-  <button class="choice">🛏️ Dans sa chambre</button>
-  <button class="choice">🏞️ Au parc</button>
-  <button class="choice">🏊‍♂️ À la piscine</button>
-</div>
+    <div class="controls">
+      <button class="btn" id="newRound">🔁 Nouvelle manche</button>
+      <button class="btn" id="share">📤 Partager</button>
+    </div>
 
-<p id="message"></p>
-<p id="score">Score : 0 trouvés / 0 parties</p>
+    <div class="choices" id="choices">
+      <button class="choice c-ecole"   data-key="école">🏫 À l’école</button>
+      <button class="choice c-parc"    data-key="parc">🌳 Au parc</button>
+      <button class="choice c-piscine" data-key="piscine">🏊‍♂️ À la piscine</button>
+      <button class="choice c-nano"    data-key="nano">🏠 Chez Nano</button>
+      <button class="choice c-chambre" data-key="chambre">🛏️ Dans sa chambre</button>
+    </div>
 
-<script>
-  const playBtn = document.getElementById("playBtn");
-  const shareBtn = document.getElementById("shareBtn");
-  const choicesDiv = document.getElementById("choices");
-  const message = document.getElementById("message");
-  const hint = document.getElementById("hint");
-  const scoreText = document.getElementById("score");
-  const winSound = document.getElementById("win");
-  const loseSound = document.getElementById("lose");
-  const music = document.getElementById("music");
+    <div class="msg" id="msg"></div>
+    <div style="opacity:.7;font-size:.98rem;margin-top:6px">
+      Tu as 1 minute par manche. Tu peux essayer plusieurs lieux 😉
+    </div>
+  </div>
 
-  let score = 0, total = 0;
+  <!-- Musique légère “détective” -->
+  <audio id="bgm" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2023/02/28/audio_3e0a3f95d2.mp3?filename=sneaky-detective-160076.mp3" type="audio/mpeg">
+  </audio>
+  <!-- Sons -->
+  <audio id="win" src="https://cdn.pixabay.com/download/audio/2021/09/30/audio_739bd4b0eb.mp3?filename=kids-cheering-101573.mp3"></audio>
+  <audio id="lose" src="https://cdn.pixabay.com/download/audio/2022/03/09/audio_b86c66e444.mp3?filename=cartoon-failure-trumpet-230690.mp3"></audio>
 
-  const places = [
-    "🏫 À l'école",
-    "🏡 Chez Nano",
-    "🛏️ Dans sa chambre",
-    "🏞️ Au parc",
-    "🏊‍♂️ À la piscine"
-  ];
+  <script>
+    // Indices logiques (corrigés)
+    const HINTS = {
+      "école": [
+        "J’y apprends à lire et écrire ✏️📖",
+        "Mon cartable est près du tableau 📚",
+        "J’entends la sonnerie retentir 🛎️"
+      ],
+      "parc": [
+        "Je crois qu’il joue au ballon 🎈",
+        "Les oiseaux chantent très fort 🐦",
+        "Je vois des balançoires et des toboggans 🎠",
+        "Il y a de l’herbe partout et des arbres 🌳"
+      ],
+      "piscine": [
+        "Je crois que ça sent le chlore 💦",
+        "On entend « plouf ! plouf ! »",
+        "J’ai les doigts tout fripés 🧽"
+      ],
+      "nano": [
+        "Quelqu’un prépare un goûter 🍪",
+        "J’y passe beaucoup de temps avec Minou 🐱",
+        "J’adore y aller quand Hania et Rayan viennent 🤗"
+      ],
+      "chambre": [
+        "Mes Lego traînent partout 🧱",
+        "Mon doudou est posé sur le lit 🧸",
+        "Je ferme la porte pour jouer tranquille 🚪"
+      ]
+    };
 
-  const hints = [
-    "Je crois qu'il sent le chlore...",
-    "J'entends des oiseaux chanter 🐦",
-    "On dirait qu'il fait ses devoirs 📚",
-    "Quelqu'un prépare un goûter 🍪",
-    "Je crois qu'il joue au ballon 🎈"
-  ];
+    const places = Object.keys(HINTS);
+    const timerEl = document.getElementById("timer");
+    const hintEl  = document.getElementById("hint");
+    const msgEl   = document.getElementById("msg");
+    const scoreEl = document.getElementById("score");
+    const winS = document.getElementById("win");
+    const loseS = document.getElementById("lose");
+    const bgm = document.getElementById("bgm");
+    const choices = Array.from(document.querySelectorAll(".choice"));
+    const newRoundBtn = document.getElementById("newRound");
+    const shareBtn = document.getElementById("share");
 
-  playBtn.onclick = () => {
-    playBtn.style.display = "none";
-    shareBtn.style.display = "none";
-    choicesDiv.style.display = "block";
-    message.textContent = "";
-    const randomIndex = Math.floor(Math.random() * places.length);
-    const correctPlace = places[randomIndex];
-    const hintText = hints[randomIndex];
-    hint.textContent = "Indice : " + hintText;
-    total++;
+    let answer = null;
+    let score = 0, rounds = 0;
+    let timeLeft = 60, tick = null;
+    let found = false;
 
-    document.querySelectorAll(".choice").forEach(btn => {
-      btn.onclick = () => {
-        if (btn.textContent === correctPlace) {
-          score++;
-          message.textContent = "🎉 Youpi rigolo ! Tu as trouvé Moumounito !";
-          winSound.play();
-        } else {
-          message.textContent = "😅 Oh non... Essaie encore !";
-          loseSound.play();
+    // iPhone : démarrer l’audio au premier tap
+    document.body.addEventListener('click', () => {
+      if (bgm.paused) bgm.play().catch(()=>{});
+    }, { once:true });
+
+    function startRound(){
+      found = false;
+      answer = places[Math.floor(Math.random()*places.length)];
+      const options = HINTS[answer];
+      hintEl.textContent = "Indice : " + options[Math.floor(Math.random()*options.length)];
+      msgEl.textContent = "";
+      // réactiver tous les boutons
+      choices.forEach(b=>{ b.disabled = false; b.style.outline = "none"; });
+
+      // timer
+      clearInterval(tick);
+      timeLeft = 60;
+      timerEl.textContent = "⏱️ " + timeLeft + " s";
+      tick = setInterval(()=>{
+        timeLeft--;
+        timerEl.textContent = "⏱️ " + timeLeft + " s";
+        if(timeLeft<=0){
+          clearInterval(tick);
+          endRound(false,true);
         }
-        scoreText.textContent = "Score : " + score + " trouvés / " + total + " parties";
-        setTimeout(() => {
-          message.textContent = "";
-          playBtn.style.display = "inline-block";
-          shareBtn.style.display = "inline-block";
-          choicesDiv.style.display = "none";
-        }, 2500);
-      };
-    });
-  };
+      },1000);
 
-  shareBtn.onclick = () => {
-    const text = "Viens m’aider à retrouver Moumounito 😅🔍 : " + window.location.href;
-    if (navigator.share) {
-      navigator.share({ title: "À la recherche de Moumounito", text: text, url: window.location.href });
-    } else {
-      navigator.clipboard.writeText(text);
-      alert("Lien copié ! Envoie-le à tes amis 😄");
+      rounds++; // une manche est comptée quand elle démarre
+      updateScore();
     }
-  };
-</script>
 
+    function endRound(won, timeOut=false){
+      clearInterval(tick);
+      choices.forEach(b=>b.disabled = true);
+      if(won){
+        msgEl.innerHTML = "🎉 Bravo ! Tu as trouvé Moumounito <b>" + label(answer) + "</b> !";
+        winS.currentTime=0; winS.play().catch(()=>{});
+      }else if(timeOut){
+        msgEl.innerHTML = "⏰ Temps écoulé ! Il était <b>" + label(answer) + "</b>.";
+      }else{
+        msgEl.innerHTML = "😅 Pas là… continue, il te reste du temps !";
+      }
+    }
+
+    function label(key){
+      switch(key){
+        case "école": return "à l’école";
+        case "parc": return "au parc";
+        case "piscine": return "à la piscine";
+        case "nano": return "chez Nano";
+        case "chambre": return "dans sa chambre";
+        default: return key;
+      }
+    }
+
+    function updateScore(){
+      scoreEl.textContent = `Score : ${score} / ${rounds}`;
+    }
+
+    // clic sur un lieu
+    choices.forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        if(!answer) return;
+        const choice = btn.dataset.key;
+        if(choice === answer){
+          score++; found = true;
+          updateScore();
+          endRound(true);
+        }else{
+          btn.disabled = true;
+          btn.style.outline = "3px solid #ffb3b3";
+          loseS.currentTime=0; loseS.play().catch(()=>{});
+          msgEl.textContent = "❌ Mauvaise piste, essaie un autre lieu…";
+        }
+      });
+    });
+
+    newRoundBtn.addEventListener("click", startRound);
+
+    shareBtn.addEventListener("click", ()=>{
+      const text = "Viens m’aider à retrouver Moumounito 😅🔍 " + window.location.href;
+      if(navigator.share){
+        navigator.share({title:"Où est Moumounito ?", text, url: window.location.href});
+      }else{
+        navigator.clipboard.writeText(text);
+        alert("Lien copié, partage-le !");
+      }
+    });
+
+    // Démarre avec une manche prête
+    startRound();
+  </script>
 </body>
 </html>
